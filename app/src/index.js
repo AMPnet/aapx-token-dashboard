@@ -1,14 +1,12 @@
 import Web3 from "web3";
 import Web3Utils from "web3-utils"
+import WalletConnectProvider from "@walletconnect/web3-provider";
+import Web3Modal from "web3modal";
 import aapxArtifact from "../../build/contracts/AAPX.json";
 import splitterArtifact from "../../build/contracts/PaymentSplitter.json"
 import vestingArtifact from "../../build/contracts/TokenVesting.json"
 
 const AAPX_TOKEN_ADDRESS = "0x6667211fBf9D8A470749Bf87C8db25FAcebEA4Bd"
-
-// PRESALE
-const PRESALE_VESTING_ADDRESS = "0x07c2fB5566c257db7C4b77515461Db43906812Ff"
-const PRESALE_SPLITTER_ADDRESS = "0xDe2E40AD7136207a49A5BCBaf81F5A46A9c21177"
 
 const App = {
   web3: null,
@@ -17,38 +15,51 @@ const App = {
   // TOKEN CONTRACT
   aapx: null,
 
-  // PRESALE
-  presaleSplitter: null,
-  presaleVesting: null,
-
-  // SEED SALE
-  seedSplitter: null,
-  seedVesting: null,
-
-  // TEAM
-  teamSplitter: null,
-  teamVesting: null,
-
+  distributors: null,
+  selectedDistributor: null,
+  
   start: async function() {
     const { web3 } = this;
 
+
     try {
 
-      // Initialize contracts
+      this.distributors = [
+        {
+          name: "Presale",
+          vesting: new web3.eth.Contract(vestingArtifact.abi, "0x07c2fB5566c257db7C4b77515461Db43906812Ff"),
+          splitter: new web3.eth.Contract(splitterArtifact.abi, "0xDe2E40AD7136207a49A5BCBaf81F5A46A9c21177")
+        }
+      ]
+      this.selectedDistributor = this.distributors[0];
+
       this.aapx = new web3.eth.Contract(
         aapxArtifact.abi,
         AAPX_TOKEN_ADDRESS
       );
 
-      this.presaleSplitter = new web3.eth.Contract(
-        splitterArtifact.abi,
-        PRESALE_SPLITTER_ADDRESS
-      )
+      var that = this;
 
-      this.presaleVesting = new web3.eth.Contract(
-        vestingArtifact.abi,
-        PRESALE_VESTING_ADDRESS
-      )
+      $.each(this.distributors, async function(index, value) {
+
+        $("#selectVesting").append(`
+          <option value="${index}">${value.name}</option>
+        `)
+
+        const { balanceOf } = that.aapx.methods;
+        const vested = await balanceOf(value.vesting.options.address).call() 
+
+        $("#vestingContractsList").append(`
+          <li class="list-group-item">
+            ${value.name} : <b> ${vested} </b> <b> AAPX </b>
+          </li>
+        `)
+      })
+
+      $(document).on('change', '#selectVesting', function() {
+        const selectedValue = $("#selectVesting").find("option:selected").attr("value")
+        that.selectedDistributor = that.distributors[selectedValue]
+      })
 
       // Set accounts
       const accounts = await web3.eth.getAccounts();
@@ -56,15 +67,17 @@ const App = {
       
       this.showFullDash(accounts)
       await this.showBalances()
+      await this.calculateClaimableAAPX()
 
     } catch (error) {
 
       Swal.fire({
-        title: 'Error!',
-        text: error,
+        title: "Can't connect",
+        text: "Something went wrong.",
         icon: 'error',
         confirmButtonText: 'Ok'
       })
+      console.error(error)
 
     }
   },
@@ -73,9 +86,7 @@ const App = {
     $(".connected").show()
     $("#connectWalletButton").hide()
     $("#addressSelector").show()
-    $.each(accounts, function(index, value) {
-      $("#addressSelect").append(`<option>${value}</option>`)
-    })
+    $("#addressSelect").html(this.account)
   },
 
   showBalances: async function() {
@@ -85,13 +96,13 @@ const App = {
       Web3Utils.fromWei(accountBalance)
     )
 
-    this.calculateClaimableAAPX()
+    // this.calculateClaimableAAPX()
 
-    const presaleSplitterBalance = await balanceOf(PRESALE_SPLITTER_ADDRESS).call()
+    // const presaleSplitterBalance = await balanceOf(PRESALE_SPLITTER_ADDRESS).call()
 
-    $("#presaleClaimable").html(
-      Web3Utils.fromWei(presaleSplitterBalance)
-    )
+    // $("#presaleClaimable").html(
+    //   Web3Utils.fromWei(presaleSplitterBalance)
+    // )
   },
 
   releaseVesting: async function() {
@@ -161,9 +172,9 @@ const App = {
   calculateClaimableAAPX: async function() {
 
     const { balanceOf } = this.aapx.methods;
-    const { totalReleased, shares, released, totalShares } = this.presaleSplitter.methods;
+    const { totalReleased, shares, released, totalShares } = this.selectedDistributor.splitter.methods;
 
-    const contractBalance = Web3Utils.toBN(await balanceOf(PRESALE_SPLITTER_ADDRESS).call())
+    const contractBalance = Web3Utils.toBN(await balanceOf(this.selectedDistributor.splitter.options.address).call())
     const _totalReleased =  Web3Utils.toBN(await totalReleased().call())
     const _shares = Web3Utils.toBN(await shares(this.account).call())
     const _released = Web3Utils.toBN(await released(this.account).call())
@@ -172,28 +183,33 @@ const App = {
     const _totalReceived = contractBalance.add(_totalReleased);
     const payment = _totalReceived.mul(_shares).div(_totalShares).sub(_released)
 
-    $("#claimableTokens").html(
-      Web3Utils.fromWei(payment)
-    )
+    $("#tokensAvailableToClaim").html(payment);
   },
 
   toggleAdvanced() {
     $("#advanced").toggle()
   },
 
-  connectWalletClicked: function() {
-    if (window.ethereum) {
-      // use MetaMask's provider
-      App.web3 = new Web3(window.ethereum);
-      window.ethereum.enable(); // get permission to access accounts
-    } else {
-      Swal.fire({
-        title: 'Error!',
-        text: 'Please use a browser with a Web3/Ethereum Wallet Support (e.g. MetaMask in Chrome/Firefox or Brave Browser)',
-        icon: 'info',
-        confirmButtonText: 'Ok'
-      })
+  connectWalletClicked: async function() {
+
+    const providerOptions = {
+      walletconnect: {
+        package: WalletConnectProvider, // required
+        options: {
+          infuraId: "27e484dcd9e3efcfd25a83a78777cdf1" // required
+        }
+      }
     }
+
+    const web3Modal = new Web3Modal({
+      network: "mainnet", // optional
+      cacheProvider: true, // optional
+      providerOptions // required
+    });
+      
+    const provider = await web3Modal.connect();
+
+    App.web3 = new Web3(provider);
   
     App.start();
   }

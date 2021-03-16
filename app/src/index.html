@@ -25,7 +25,10 @@
       background-color: #232055;
       border: none;
       padding: 10px;
-      border-radius: 0px;
+    }
+
+    .btn {
+      border-radius: 100px;
     }
 
     .btn-primary:disabled {
@@ -36,15 +39,18 @@
       font-weight: bold;
       color: #232055;
     }
+    
+    hr {
+      color: #bbb;
+    }
 
     .card {
       border-radius: 0px;
+      border: none;
+      padding: 30px;
     }
 
-    .list-group {
-      border-radius: 0px;
-    }
-
+    
     p {
       font-size: small;
       color: #aaa;
@@ -52,6 +58,8 @@
 
     .card {
       height: 100%;
+      box-shadow: 0 5px 10px rgba(154,160,185,.05), 0 15px 40px rgba(166,173,201,.2);
+      border-radius: 20px;
     }
 
     .card-title {
@@ -75,7 +83,7 @@
           Connect Wallet
         </button>
         <div style="display: none;" id="addressSelector">
-          <b>Connected address</b> <b id="addressSelect"></b>
+          <b class="text-uppercase">Connected address</b> <br> <p id="addressSelect"></p>
         </div>
       </div>
       <div class="col-md-12 mt-3">
@@ -85,7 +93,7 @@
     
   </div>
 
-  <div class="container pt-3">
+  <div class="container">
     <div class="row">
 
 
@@ -108,12 +116,12 @@
       <div style="display: none;" class="col-md-6 connected mt-3">
         <div class="card">
           <div class="card-body">
-            <div class="card-title">
-              Total claimable tokens from Vesting contracts
+            <div class="card-title text-uppercase">
+              Vesting contracts overview
             </div>
             <div class="card-text">
-              <ul class="list-group">
-                <li class="list-group-item">
+              <ul id="vestingContractsList" class="list-group">
+                <!-- <li class="list-group-item">
                   Presale: <b id="presaleClaimable"></b> <b>AAPX</b>
                 </li>
                 <li class="list-group-item">
@@ -121,7 +129,7 @@
                 </li>
                 <li class="list-group-item">
                   Project (Team/Advisors/Pre-Seed): <b>0</b> <b>AAPX</b>
-                </li>
+                </li> -->
               </ul>
             </div>
           </div>
@@ -137,20 +145,23 @@
             </div>
             <div class="card-text">
               <p>Click the Claim button to collect your vested AAPX tokens. The amount of pending tokens is calculated from the amount collected from the vesting contract - not from the amount actually vested. If the amount seems smaller than it should be - please call the corresponding vesting function in the "Vesting Contract Management" card</p>
+              
+              <b class=" text-uppercase">Select your presale allocation</b>
+              <select id="selectVesting" class="form-select mb-3 mt-2">
+              </select>
+
               <ul class="list-group">
-                <li class="list-group-item">Your AAPX Balance: <b id="balance"></b> <b>AAPX</b> </li>
-                <li class="list-group-item">Tokens available to claim: <b id="claimableTokens"></b></li>
+                <!-- <li class="list-group-item">Your AAPX Balance: <b id="balance"></b> <b>AAPX</b> </li> -->
+                <li class="list-group-item">Tokens available to claim: <b id="tokensAvailableToClaim"></b></li>
               </ul>
-              <button onclick="App.releasePaymentSplitter()" class="btn btn-primary w-100 mt-3">Claim Presale</button>
-              <button disabled class="btn btn-primary w-100 mt-3">Claim Seed Sale</button>
-              <button disabled class="btn btn-primary w-100 mt-3">Claim Project/Advisory Tokens</button>
+              <button onclick="App.releasePaymentSplitter()" class="btn btn-primary w-100 mt-3 py-3">Claim</button>
             </div>
           </div>
         </div>
       </div>
 
       <div style="display: none;" class="col-md-12 mt-3 connected">
-        <button onclick="App.toggleAdvanced()" class="btn btn-danger">Toggle Advanced</button>
+        <button onclick="App.toggleAdvanced()" class="btn btn-danger w-100 py-3">Toggle Advanced</button>
       </div>
       <div id="advanced" style="display: none;" class="col-md-12 mt-3">
         <div class="card">
