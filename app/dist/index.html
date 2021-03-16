@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.6.0/dist/umd/popper.min.js" integrity="sha384-KsvD1yqQ1/1+IA7gi3P0tyJcT3vR+NdBTt13hSJ2lnve8agRGXTTyNaBYmCR/Nwi" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.min.js" integrity="sha384-nsg8ua9HAw1y0W1btsyWgBklPnCUAFLuTMS2G72MMONqmOymq585AcH49TLBQObG" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+  <script src="index.js"></script>
+  <title>AMPnet APX Contracts Dashboard</title>
+</head>
+<body>
+
+  <style>
+    * {
+      font-family: 'Poppins';
+    }
+
+    .btn-primary {
+      background-color: #232055;
+      border: none;
+      padding: 10px;
+    }
+
+    .btn {
+      border-radius: 100px;
+    }
+
+    .btn-primary:disabled {
+      background: #333;
+    }
+
+    h2 {
+      font-weight: bold;
+      color: #232055;
+    }
+    
+    hr {
+      color: #bbb;
+    }
+
+    .card {
+      border-radius: 0px;
+      border: none;
+      padding: 30px;
+    }
+
+    
+    p {
+      font-size: small;
+      color: #aaa;
+    }
+
+    .card {
+      height: 100%;
+      box-shadow: 0 5px 10px rgba(154,160,185,.05), 0 15px 40px rgba(166,173,201,.2);
+      border-radius: 20px;
+    }
+
+    .card-title {
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    body {
+      padding-bottom: 100px;
+    }
+  </style>
+
+  <div class="container mt-5">
+    <div class="row">
+      <div class="col-md-12 mb-5">
+        <img src="https://ampnet.io/assets/images/logo-amp.png" style="height: 50px;" alt="">
+      </div>
+      <h2 class="float-left col-md-6">AAPX Token Dashboard</h2>
+      <div class="col-md-6">
+        <button id="connectWalletButton" onclick="App.connectWalletClicked()" class="btn btn-primary py-3 w-100">
+          Connect Wallet
+        </button>
+        <div style="display: none;" id="addressSelector">
+          <b class="text-uppercase">Connected address</b> <br> <p id="addressSelect"></p>
+        </div>
+      </div>
+      <div class="col-md-12 mt-3">
+        <div class="alert alert-info">Always check the URL of the AAPX Dashboard! The <i>only</i> official domain of the AMPnet APX ($AAPX) project is: ampnet.io </div>
+      </div>
+    </div>
+    
+  </div>
+
+  <div class="container">
+    <div class="row">
+
+
+      <div class="col-md-6 mt-3">
+        <div class="card">
+          <div class="card-body">
+            <div class="card-title">
+              AAPX Token Overview
+            </div>
+            <div class="">
+              <ul class="list-group">
+                <li class="list-group-item">Contract address - <a href="">0xbfD815347d024F449886c171f78Fa5B8E6790811</a></li>
+                <li class="list-group-item">Trade on Uniswap - <a href="https://info.uniswap.org/token/0xbfd815347d024f449886c171f78fa5b8e6790811">Link</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 mt-3">
+        <div class="card">
+          <div class="card-body">
+            <div class="card-title">
+              My balance
+            </div>
+            <div class="">
+              <div id="myBalance" style="display: none; font-weight: bold;" class="connected">
+              
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: none;" class="col-md-6 connected mt-3">
+        <div class="card">
+          <div class="card-body">
+            <div class="card-title text-uppercase">
+              Vesting contracts overview
+            </div>
+            <div class="card-text">
+              <ul id="vestingContractsList" class="list-group">
+                <!-- <li class="list-group-item">
+                  Presale: <b id="presaleClaimable"></b> <b>AAPX</b>
+                </li>
+                <li class="list-group-item">
+                  Seed Sale: <b>0</b> <b>AAPX</b>
+                </li>
+                <li class="list-group-item">
+                  Project (Team/Advisors/Pre-Seed): <b>0</b> <b>AAPX</b>
+                </li> -->
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: none;" class="col-md-6 mt-3 connected">
+
+        <div class="card">
+          <div class="card-body">
+            <div class="card-title">
+              Claim Tokens
+            </div>
+            <div class="card-text">
+              <p>Click the Claim button to collect your vested AAPX tokens. The amount of pending tokens is calculated from the amount collected from the vesting contract - not from the amount actually vested. If the amount seems smaller than it should be - please call the corresponding vesting function in the "Vesting Contract Management" card</p>
+              
+              <b class=" text-uppercase">Select your allocation</b>
+              <select id="selectVesting" class="form-select mb-3 mt-2">
+              </select>
+
+              <ul class="list-group">
+                <!-- <li class="list-group-item">Your AAPX Balance: <b id="balance"></b> <b>AAPX</b> </li> -->
+                <li class="list-group-item">Tokens available to claim: <b id="tokensAvailableToClaim"></b></li>
+              </ul>
+              <button onclick="App.releasePaymentSplitter()" class="btn btn-primary w-100 mt-3 py-3">Claim</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: none;" class="col-md-12 mt-3 connected">
+        <button onclick="App.toggleAdvanced()" class="btn btn-danger w-100 py-3">Toggle Advanced</button>
+      </div>
+      <div id="advanced" style="display: none;" class="col-md-12 mt-3">
+        <div class="card">
+          <div class="card-body">
+            <div class="card-title">
+              Vesting Contract Management
+            </div>
+            <p class="card-text">Clicking on one of the Vest buttons below will Vest all of the tokens for one of the investment rounds. 
+              The AMPnet team is commiting to call these functions periodically, however - if you need to vest & claim your tokens immediately - call the corresponding function yourself.</p>
+            <div>
+              <button onclick="App.releaseVesting()" class="btn btn-primary w-100 text-uppercase">Vest all contracts (Warning: Expensive Tx)</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>
