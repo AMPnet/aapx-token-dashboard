@@ -79,7 +79,7 @@
       </div>
       <h2 class="float-left col-md-6">AAPX Token Dashboard</h2>
       <div class="col-md-6">
-        <button id="connectWalletButton" onclick="App.connectWalletClicked()" class="btn btn-primary w-100">
+        <button id="connectWalletButton" onclick="App.connectWalletClicked()" class="btn btn-primary py-3 w-100">
           Connect Wallet
         </button>
         <div style="display: none;" id="addressSelector">
@@ -97,7 +97,7 @@
     <div class="row">
 
 
-      <div class="col-md-12 mt-3">
+      <div class="col-md-6 mt-3">
         <div class="card">
           <div class="card-body">
             <div class="card-title">
@@ -108,6 +108,21 @@
                 <li class="list-group-item">Contract address - <a href="">0xbfD815347d024F449886c171f78Fa5B8E6790811</a></li>
                 <li class="list-group-item">Trade on Uniswap - <a href="https://info.uniswap.org/token/0xbfd815347d024f449886c171f78fa5b8e6790811">Link</a></li>
               </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 mt-3">
+        <div class="card">
+          <div class="card-body">
+            <div class="card-title">
+              My balance
+            </div>
+            <div class="">
+              <div id="myBalance" style="display: none; font-weight: bold;" class="connected">
+              
+              </div>
             </div>
           </div>
         </div>
@@ -146,7 +161,7 @@
             <div class="card-text">
               <p>Click the Claim button to collect your vested AAPX tokens. The amount of pending tokens is calculated from the amount collected from the vesting contract - not from the amount actually vested. If the amount seems smaller than it should be - please call the corresponding vesting function in the "Vesting Contract Management" card</p>
               
-              <b class=" text-uppercase">Select your presale allocation</b>
+              <b class=" text-uppercase">Select your allocation</b>
               <select id="selectVesting" class="form-select mb-3 mt-2">
               </select>
 
@@ -172,9 +187,7 @@
             <p class="card-text">Clicking on one of the Vest buttons below will Vest all of the tokens for one of the investment rounds. 
               The AMPnet team is commiting to call these functions periodically, however - if you need to vest & claim your tokens immediately - call the corresponding function yourself.</p>
             <div>
-              <button onclick="App.releaseVesting()" class="btn btn-primary w-100">Release Presale AAPX</button>
-              <button disabled class="btn btn-primary w-100 mt-3">Release Seed Sale AAPX</button>
-              <button disabled class="btn btn-primary w-100 mt-3">Release Project AAPX</button>
+              <button onclick="App.releaseVesting()" class="btn btn-primary w-100 text-uppercase">Vest all contracts (Warning: Expensive Tx)</button>
             </div>
           </div>
         </div>

@@ -6,7 +6,7 @@ import aapxArtifact from "../../build/contracts/AAPX.json";
 import splitterArtifact from "../../build/contracts/PaymentSplitter.json"
 import vestingArtifact from "../../build/contracts/TokenVesting.json"
 
-const AAPX_TOKEN_ADDRESS = "0x6667211fBf9D8A470749Bf87C8db25FAcebEA4Bd"
+const AAPX_TOKEN_ADDRESS = "0xCA7a6599be1e5215256DA44d2dd7894b0cac9b0e"
 
 const App = {
   web3: null,
@@ -27,9 +27,19 @@ const App = {
       this.distributors = [
         {
           name: "Presale",
-          vesting: new web3.eth.Contract(vestingArtifact.abi, "0x07c2fB5566c257db7C4b77515461Db43906812Ff"),
-          splitter: new web3.eth.Contract(splitterArtifact.abi, "0xDe2E40AD7136207a49A5BCBaf81F5A46A9c21177")
-        }
+          vesting: new web3.eth.Contract(vestingArtifact.abi, "0xC14F080B29929516D2922977C73902F38e6345c9"),
+          splitter: new web3.eth.Contract(splitterArtifact.abi, "0x0059550f5a18a3454e4299c39C24e59990659744")
+        },
+        {
+          name: "TCL Seed Sale",
+          vesting: new web3.eth.Contract(vestingArtifact.abi, "0x9d2D924CDAb332ED4D70153DC8e6516e05F45791"),
+          splitter: new web3.eth.Contract(splitterArtifact.abi, "0xeC36638eDc05A6D6a6E66df6ec1b074E2851352E")
+        },
+        {
+          name: "BlackDragon Round 2",
+          vesting: new web3.eth.Contract(vestingArtifact.abi, "0x6FBCC9Ce8bFBc08573D8d0f9014c240d4325FEbb"),
+          splitter: new web3.eth.Contract(splitterArtifact.abi, "0x6769Fd40bAc5d41DCfC1115F71C9B2F08794e864")
+        },
       ]
       this.selectedDistributor = this.distributors[0];
 
@@ -47,18 +57,26 @@ const App = {
         `)
 
         const { balanceOf } = that.aapx.methods;
-        const vested = await balanceOf(value.vesting.options.address).call() 
+        const vested = Web3Utils.fromWei(await balanceOf(value.splitter.options.address).call())
+
+        
+        const myVested = Web3Utils.fromWei(await that.calculateClaimableAAPX(value))
 
         $("#vestingContractsList").append(`
           <li class="list-group-item">
-            ${value.name} : <b> ${vested} </b> <b> AAPX </b>
+            Name: ${value.name} <br> Total claimable: <b> ${vested} </b> <b> AAPX </b> <br> My claimable: <b> ${myVested} AAPX</b>
           </li>
         `)
       })
 
-      $(document).on('change', '#selectVesting', function() {
+      $(document).on('change', '#selectVesting', async function() {
         const selectedValue = $("#selectVesting").find("option:selected").attr("value")
         that.selectedDistributor = that.distributors[selectedValue]
+        
+
+        $("#tokensAvailableToClaim").html(
+          Web3Utils.fromWei(await that.calculateClaimableAAPX(this.selectedDistributor)) + " AAPX"
+        );
       })
 
       // Set accounts
@@ -66,8 +84,14 @@ const App = {
       this.account = accounts[0];
       
       this.showFullDash(accounts)
+      
+      const availableToClaim = await that.calculateClaimableAAPX(this.selectedDistributor)
+
+      $("#tokensAvailableToClaim").html(
+        Web3Utils.fromWei(availableToClaim) + " AAPX"
+      );
+
       await this.showBalances()
-      await this.calculateClaimableAAPX()
 
     } catch (error) {
 
@@ -92,22 +116,14 @@ const App = {
   showBalances: async function() {
     const { balanceOf } = this.aapx.methods;
     const accountBalance = await balanceOf(this.account).call();
-    $("#balance").html(
-      Web3Utils.fromWei(accountBalance)
+    $("#myBalance").html(
+      Web3Utils.fromWei(accountBalance) + " AAPX"
     )
-
-    // this.calculateClaimableAAPX()
-
-    // const presaleSplitterBalance = await balanceOf(PRESALE_SPLITTER_ADDRESS).call()
-
-    // $("#presaleClaimable").html(
-    //   Web3Utils.fromWei(presaleSplitterBalance)
-    // )
   },
 
   releaseVesting: async function() {
 
-    const { release } = this.presaleVesting.methods;
+    const { release } = this.selectedDistributor.vesting.methods;
 
     release(AAPX_TOKEN_ADDRESS).send({ from: this.account }).on('transactionHash', function(hash) {
       Swal.fire({
@@ -123,7 +139,6 @@ const App = {
         icon: 'success',
         confirmButtonText: 'Ok'
       })
-      this.showBalances()
     }).on('error', function(error, receipt) {
       Swal.fire({
         title: 'Error!',
@@ -136,7 +151,7 @@ const App = {
 
   releasePaymentSplitter: async function() {
 
-      const { release } = this.presaleSplitter.methods;
+      const { release } = this.selectedDistributor.splitter.methods;
       release(this.account).send({ from: this.account }).on('transactionHash', function(hash) {
 
         Swal.fire({
@@ -147,34 +162,29 @@ const App = {
         })
 
       }).on('receipt', function(confirmationNumber, receipt) {
-
         Swal.fire({
           title: 'Success!',
           text: 'Vesting released',
           icon: 'success',
           confirmButtonText: 'Ok'
         })
-        this.showBalances()
-
       }).on('error', function(err, receipt) {
-
         Swal.fire({
           title: 'Error!',
           text: 'Error calling function. Possible causes: No tokens to distribute; Not enough ETH on your wallet',
           icon: 'error',
           confirmButtonText: 'Ok'
         })
-
       })
 
   },
 
-  calculateClaimableAAPX: async function() {
+  calculateClaimableAAPX: async function(distributor) {
 
     const { balanceOf } = this.aapx.methods;
-    const { totalReleased, shares, released, totalShares } = this.selectedDistributor.splitter.methods;
+    const { totalReleased, shares, released, totalShares } = distributor.splitter.methods;
 
-    const contractBalance = Web3Utils.toBN(await balanceOf(this.selectedDistributor.splitter.options.address).call())
+    const contractBalance = Web3Utils.toBN(await balanceOf(distributor.splitter.options.address).call())
     const _totalReleased =  Web3Utils.toBN(await totalReleased().call())
     const _shares = Web3Utils.toBN(await shares(this.account).call())
     const _released = Web3Utils.toBN(await released(this.account).call())
@@ -183,7 +193,7 @@ const App = {
     const _totalReceived = contractBalance.add(_totalReleased);
     const payment = _totalReceived.mul(_shares).div(_totalShares).sub(_released)
 
-    $("#tokensAvailableToClaim").html(payment);
+    return payment;
   },
 
   toggleAdvanced() {
