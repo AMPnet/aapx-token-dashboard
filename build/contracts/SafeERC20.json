@@ -1,15 +1,15 @@
 {
   "contractName": "SafeERC20",
   "abi": [],
-  "metadata": "{\"compiler\":{\"version\":\"0.4.24+commit.e67f0147\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"methods\":{},\"title\":\"SafeERC20\"},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/Users/mpevec/projects/aapx-token-dashboard/contracts/imports/SafeERC20.sol\":\"SafeERC20\"},\"evmVersion\":\"byzantium\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/mpevec/projects/aapx-token-dashboard/contracts/imports/IERC20.sol\":{\"keccak256\":\"0xc8a7f15fa44eb10057f8bcb58418d3aed6f5267d211d18f93f3d4e0293e3da44\",\"urls\":[\"bzzr://8825e2508348b01a091ff47b8525e583b6e5604f6679684f805d67a9a6a2a7e9\"]},\"/Users/mpevec/projects/aapx-token-dashboard/contracts/imports/SafeERC20.sol\":{\"keccak256\":\"0x9ca5e3fa54f171766956351aa44f47a520d28df074883e2969c5059ea3b07698\",\"urls\":[\"bzzr://e7d6549dac7f72d51b14de8a40a97c1131678a8c288a2afdc01f995bd7454ea8\"]},\"/Users/mpevec/projects/aapx-token-dashboard/contracts/imports/SafeMath.sol\":{\"keccak256\":\"0xdd18f05c74536a06166c90a17ec3c6932853764f292bed314ceb23e730ff83af\",\"urls\":[\"bzzr://1d8a608339978ac18782f7051816cf23b4072d8814979e3ef74788cc6025cca0\"]}},\"version\":1}",
-  "bytecode": "0x604c602c600b82828239805160001a60731460008114601c57601e565bfe5b5030600052607381538281f30073000000000000000000000000000000000000000030146080604052600080fd00a165627a7a723058200ca1976920ef4d8f8b9026410be5795efb63895b3d6f11afdd50cac526ab766f0029",
-  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600080fd00a165627a7a723058200ca1976920ef4d8f8b9026410be5795efb63895b3d6f11afdd50cac526ab766f0029",
+  "metadata": "{\"compiler\":{\"version\":\"0.4.24+commit.e67f0147\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"methods\":{},\"title\":\"SafeERC20\"},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/Users/mansha/Documents/apx-contracts-dashboard/contracts/imports/SafeERC20.sol\":\"SafeERC20\"},\"evmVersion\":\"byzantium\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/mansha/Documents/apx-contracts-dashboard/contracts/imports/IERC20.sol\":{\"keccak256\":\"0xc8a7f15fa44eb10057f8bcb58418d3aed6f5267d211d18f93f3d4e0293e3da44\",\"urls\":[\"bzzr://8825e2508348b01a091ff47b8525e583b6e5604f6679684f805d67a9a6a2a7e9\"]},\"/Users/mansha/Documents/apx-contracts-dashboard/contracts/imports/SafeERC20.sol\":{\"keccak256\":\"0x9ca5e3fa54f171766956351aa44f47a520d28df074883e2969c5059ea3b07698\",\"urls\":[\"bzzr://e7d6549dac7f72d51b14de8a40a97c1131678a8c288a2afdc01f995bd7454ea8\"]},\"/Users/mansha/Documents/apx-contracts-dashboard/contracts/imports/SafeMath.sol\":{\"keccak256\":\"0xdd18f05c74536a06166c90a17ec3c6932853764f292bed314ceb23e730ff83af\",\"urls\":[\"bzzr://1d8a608339978ac18782f7051816cf23b4072d8814979e3ef74788cc6025cca0\"]}},\"version\":1}",
+  "bytecode": "0x604c602c600b82828239805160001a60731460008114601c57601e565bfe5b5030600052607381538281f30073000000000000000000000000000000000000000030146080604052600080fd00a165627a7a723058209d983f5e416e798e5dd6b52c4997e9c0472dbd54fbdccc08b101cd3a9345f4170029",
+  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600080fd00a165627a7a723058209d983f5e416e798e5dd6b52c4997e9c0472dbd54fbdccc08b101cd3a9345f4170029",
   "sourceMap": "344:1296:5:-;;132:2:-1;166:7;155:9;146:7;137:37;252:7;246:14;243:1;238:23;232:4;229:33;270:1;265:20;;;;222:63;;265:20;274:9;222:63;;298:9;295:1;288:20;328:4;319:7;311:22;352:7;343;336:24",
   "deployedSourceMap": "344:1296:5:-;;;;;;;;",
   "source": "pragma solidity ^0.4.24;\n\nimport \"./IERC20.sol\";\nimport \"./SafeMath.sol\";\n\n/**\n * @title SafeERC20\n * @dev Wrappers around ERC20 operations that throw on failure.\n * To use this library you can add a `using SafeERC20 for ERC20;` statement to your contract,\n * which allows you to call the safe operations as `token.safeTransfer(...)`, etc.\n */\nlibrary SafeERC20 {\n\n  using SafeMath for uint256;\n\n  function safeTransfer(\n    IERC20 token,\n    address to,\n    uint256 value\n  )\n    internal\n  {\n    require(token.transfer(to, value));\n  }\n\n  function safeTransferFrom(\n    IERC20 token,\n    address from,\n    address to,\n    uint256 value\n  )\n    internal\n  {\n    require(token.transferFrom(from, to, value));\n  }\n\n  function safeApprove(\n    IERC20 token,\n    address spender,\n    uint256 value\n  )\n    internal\n  {\n    // safeApprove should only be called when setting an initial allowance, \n    // or when resetting it to zero. To increase and decrease it, use \n    // 'safeIncreaseAllowance' and 'safeDecreaseAllowance'\n    require((value == 0) || (token.allowance(msg.sender, spender) == 0));\n    require(token.approve(spender, value));\n  }\n\n  function safeIncreaseAllowance(\n    IERC20 token,\n    address spender,\n    uint256 value\n  )\n    internal\n  {\n    uint256 newAllowance = token.allowance(address(this), spender).add(value);\n    require(token.approve(spender, newAllowance));\n  }\n\n  function safeDecreaseAllowance(\n    IERC20 token,\n    address spender,\n    uint256 value\n  )\n    internal\n  {\n    uint256 newAllowance = token.allowance(address(this), spender).sub(value);\n    require(token.approve(spender, newAllowance));\n  }\n}\n",
-  "sourcePath": "/Users/mpevec/projects/aapx-token-dashboard/contracts/imports/SafeERC20.sol",
+  "sourcePath": "/Users/mansha/Documents/apx-contracts-dashboard/contracts/imports/SafeERC20.sol",
   "ast": {
-    "absolutePath": "/Users/mpevec/projects/aapx-token-dashboard/contracts/imports/SafeERC20.sol",
+    "absolutePath": "/Users/mansha/Documents/apx-contracts-dashboard/contracts/imports/SafeERC20.sol",
     "exportedSymbols": {
       "SafeERC20": [
         1674
@@ -30,7 +30,7 @@
         "src": "0:24:5"
       },
       {
-        "absolutePath": "/Users/mpevec/projects/aapx-token-dashboard/contracts/imports/IERC20.sol",
+        "absolutePath": "/Users/mansha/Documents/apx-contracts-dashboard/contracts/imports/IERC20.sol",
         "file": "./IERC20.sol",
         "id": 1533,
         "nodeType": "ImportDirective",
@@ -41,7 +41,7 @@
         "unitAlias": ""
       },
       {
-        "absolutePath": "/Users/mpevec/projects/aapx-token-dashboard/contracts/imports/SafeMath.sol",
+        "absolutePath": "/Users/mansha/Documents/apx-contracts-dashboard/contracts/imports/SafeMath.sol",
         "file": "./SafeMath.sol",
         "id": 1534,
         "nodeType": "ImportDirective",
@@ -2051,7 +2051,7 @@
   },
   "legacyAST": {
     "attributes": {
-      "absolutePath": "/Users/mpevec/projects/aapx-token-dashboard/contracts/imports/SafeERC20.sol",
+      "absolutePath": "/Users/mansha/Documents/apx-contracts-dashboard/contracts/imports/SafeERC20.sol",
       "exportedSymbols": {
         "SafeERC20": [
           1674
@@ -2075,7 +2075,7 @@
       {
         "attributes": {
           "SourceUnit": 1422,
-          "absolutePath": "/Users/mpevec/projects/aapx-token-dashboard/contracts/imports/IERC20.sol",
+          "absolutePath": "/Users/mansha/Documents/apx-contracts-dashboard/contracts/imports/IERC20.sol",
           "file": "./IERC20.sol",
           "scope": 1675,
           "symbolAliases": [
@@ -2090,7 +2090,7 @@
       {
         "attributes": {
           "SourceUnit": 1803,
-          "absolutePath": "/Users/mpevec/projects/aapx-token-dashboard/contracts/imports/SafeMath.sol",
+          "absolutePath": "/Users/mansha/Documents/apx-contracts-dashboard/contracts/imports/SafeMath.sol",
           "file": "./SafeMath.sol",
           "scope": 1675,
           "symbolAliases": [
@@ -4251,7 +4251,7 @@
   },
   "networks": {},
   "schemaVersion": "3.3.4",
-  "updatedAt": "2021-03-16T14:02:56.824Z",
+  "updatedAt": "2021-03-17T14:26:43.234Z",
   "devdoc": {
     "methods": {},
     "title": "SafeERC20"

@@ -181,9 +181,9 @@
   "sourceMap": "",
   "deployedSourceMap": "",
   "source": "pragma solidity ^0.4.24;\n\n/**\n * @title ERC20 interface\n * @dev see https://github.com/ethereum/EIPs/issues/20\n */\ninterface IERC20 {\n  function totalSupply() external view returns (uint256);\n\n  function balanceOf(address who) external view returns (uint256);\n\n  function allowance(address owner, address spender)\n    external view returns (uint256);\n\n  function transfer(address to, uint256 value) external returns (bool);\n\n  function approve(address spender, uint256 value)\n    external returns (bool);\n\n  function transferFrom(address from, address to, uint256 value)\n    external returns (bool);\n\n  event Transfer(\n    address indexed from,\n    address indexed to,\n    uint256 value\n  );\n\n  event Approval(\n    address indexed owner,\n    address indexed spender,\n    uint256 value\n  );\n}\n",
-  "sourcePath": "/Users/mpevec/projects/aapx-token-dashboard/contracts/imports/IERC20.sol",
+  "sourcePath": "/Users/mansha/Documents/apx-contracts-dashboard/contracts/imports/IERC20.sol",
   "ast": {
-    "absolutePath": "/Users/mpevec/projects/aapx-token-dashboard/contracts/imports/IERC20.sol",
+    "absolutePath": "/Users/mansha/Documents/apx-contracts-dashboard/contracts/imports/IERC20.sol",
     "exportedSymbols": {
       "IERC20": [
         1421
@@ -1018,7 +1018,7 @@
   },
   "legacyAST": {
     "attributes": {
-      "absolutePath": "/Users/mpevec/projects/aapx-token-dashboard/contracts/imports/IERC20.sol",
+      "absolutePath": "/Users/mansha/Documents/apx-contracts-dashboard/contracts/imports/IERC20.sol",
       "exportedSymbols": {
         "IERC20": [
           1421
@@ -1915,7 +1915,7 @@
   },
   "networks": {},
   "schemaVersion": "3.3.4",
-  "updatedAt": "2021-03-16T14:02:56.813Z",
+  "updatedAt": "2021-03-17T14:26:43.213Z",
   "devdoc": {
     "methods": {},
     "title": "ERC20 interface"
