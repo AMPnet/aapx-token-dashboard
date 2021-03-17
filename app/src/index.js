@@ -81,7 +81,7 @@ const App = {
         $("#vestingContractsList").append(`
           <li class="list-group-item">
             <b>${value.name}</b> | Total claimable: <b> ${vested} </b> <b> AAPX </b> | My claimable: <b> ${myVested} AAPX</b> | 
-            Total vested: <b>${coldVest}</b> <b>AAPX<b> 
+            Remaining vested: <b>${coldVest}</b> <b>AAPX<b> 
           </li>
         `)
       })
@@ -115,7 +115,7 @@ const App = {
 
       Swal.fire({
         title: "Can't connect",
-        text: "Something went wrong.",
+        text: "Something went wrong. Check your network in MetaMask, it should be Mainnet. Check if you are connecting with an actual vesting address - nonvesting addreses cannot connect to the portal.",
         icon: 'error',
         confirmButtonText: 'Ok'
       })
