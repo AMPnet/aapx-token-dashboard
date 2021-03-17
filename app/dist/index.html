@@ -105,47 +105,17 @@
             </div>
             <div class="">
               <ul class="list-group">
-                <li class="list-group-item">Contract address - <a href="">0xbfD815347d024F449886c171f78Fa5B8E6790811</a></li>
+                <li class="list-group-item">Contract address - <a href="https://etherscan.io/address/0xbfD815347d024F449886c171f78Fa5B8E6790811">0xbfD815347d024F449886c171f78Fa5B8E6790811</a></li>
                 <li class="list-group-item">Trade on Uniswap - <a href="https://info.uniswap.org/token/0xbfd815347d024f449886c171f78fa5b8e6790811">Link</a></li>
               </ul>
             </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-6 mt-3">
-        <div class="card">
-          <div class="card-body">
-            <div class="card-title">
+            <div style="display: none;" class="card-title connected mt-3">
               My balance
             </div>
             <div class="">
               <div id="myBalance" style="display: none; font-weight: bold;" class="connected">
               
               </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div style="display: none;" class="col-md-6 connected mt-3">
-        <div class="card">
-          <div class="card-body">
-            <div class="card-title text-uppercase">
-              Vesting contracts overview
-            </div>
-            <div class="card-text">
-              <ul id="vestingContractsList" class="list-group">
-                <!-- <li class="list-group-item">
-                  Presale: <b id="presaleClaimable"></b> <b>AAPX</b>
-                </li>
-                <li class="list-group-item">
-                  Seed Sale: <b>0</b> <b>AAPX</b>
-                </li>
-                <li class="list-group-item">
-                  Project (Team/Advisors/Pre-Seed): <b>0</b> <b>AAPX</b>
-                </li> -->
-              </ul>
             </div>
           </div>
         </div>
@@ -175,6 +145,30 @@
         </div>
       </div>
 
+      <div style="display: none;" class="col-md-12 connected mt-3">
+        <div class="card">
+          <div class="card-body">
+            <div class="card-title text-uppercase">
+              Vesting contracts overview
+            </div>
+            <div class="card-text">
+              <ul id="vestingContractsList" class="list-group">
+                <!-- <li class="list-group-item">
+                  Presale: <b id="presaleClaimable"></b> <b>AAPX</b>
+                </li>
+                <li class="list-group-item">
+                  Seed Sale: <b>0</b> <b>AAPX</b>
+                </li>
+                <li class="list-group-item">
+                  Project (Team/Advisors/Pre-Seed): <b>0</b> <b>AAPX</b>
+                </li> -->
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="col-md-12 mt-5">
       <div style="display: none;" class="col-md-12 mt-3 connected">
         <button onclick="App.toggleAdvanced()" class="btn btn-danger w-100 py-3">Toggle Advanced</button>
       </div>
@@ -187,7 +181,7 @@
             <p class="card-text">Clicking on one of the Vest buttons below will Vest all of the tokens for one of the investment rounds. 
               The AMPnet team is commiting to call these functions periodically, however - if you need to vest & claim your tokens immediately - call the corresponding function yourself.</p>
             <div>
-              <button onclick="App.releaseVesting()" class="btn btn-primary w-100 text-uppercase">Vest all contracts (Warning: Expensive Tx)</button>
+              <button onclick="App.releaseVesting()" class="btn btn-primary w-100 text-uppercase">Release from Vesting contract to PaymentSplitter Contract</button>
             </div>
           </div>
         </div>

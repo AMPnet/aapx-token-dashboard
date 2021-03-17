@@ -6,7 +6,7 @@ import aapxArtifact from "../../build/contracts/AAPX.json";
 import splitterArtifact from "../../build/contracts/PaymentSplitter.json"
 import vestingArtifact from "../../build/contracts/TokenVesting.json"
 
-const AAPX_TOKEN_ADDRESS = "0xCA7a6599be1e5215256DA44d2dd7894b0cac9b0e"
+const AAPX_TOKEN_ADDRESS = "0xbfD815347d024F449886c171f78Fa5B8E6790811"
 
 const App = {
   web3: null,
@@ -26,19 +26,34 @@ const App = {
 
       this.distributors = [
         {
-          name: "Presale",
-          vesting: new web3.eth.Contract(vestingArtifact.abi, "0xC14F080B29929516D2922977C73902F38e6345c9"),
-          splitter: new web3.eth.Contract(splitterArtifact.abi, "0x0059550f5a18a3454e4299c39C24e59990659744")
+          name: "Durty (Presale)",
+          splitter: new web3.eth.Contract(splitterArtifact.abi, "0x4E9b5E0D99fA397B4169fA51f4c779c410d2569e"),
+          vesting: new web3.eth.Contract(vestingArtifact.abi, "0x09f04D692F4C97D0b86fb57f81cE2346D161eA88")
         },
         {
-          name: "TCL Seed Sale",
-          vesting: new web3.eth.Contract(vestingArtifact.abi, "0x9d2D924CDAb332ED4D70153DC8e6516e05F45791"),
-          splitter: new web3.eth.Contract(splitterArtifact.abi, "0xeC36638eDc05A6D6a6E66df6ec1b074E2851352E")
+          name: "BlackDragon (Presale)",
+          splitter: new web3.eth.Contract(splitterArtifact.abi, "0xbE9f603b6D1413fC4d7B5d07ED24855bFa2B9694"),
+          vesting: new web3.eth.Contract(vestingArtifact.abi, "0xd40E97C8eE6f3F0905F20f782f5407b543CFB7eD")
         },
         {
-          name: "BlackDragon Round 2",
-          vesting: new web3.eth.Contract(vestingArtifact.abi, "0x6FBCC9Ce8bFBc08573D8d0f9014c240d4325FEbb"),
-          splitter: new web3.eth.Contract(splitterArtifact.abi, "0x6769Fd40bAc5d41DCfC1115F71C9B2F08794e864")
+          name: "DEXT Force (Presale)",
+          splitter: new web3.eth.Contract(splitterArtifact.abi, "0x57cf044E7BaDe15dDBE1024CA9c3B0e2e6746929"),
+          vesting: new web3.eth.Contract(vestingArtifact.abi, "0x2A707746959dCBefFAb19F1488E936d2b688bA87")
+        },
+        {
+          name: "DuckDAO Group 1 (Presale)",
+          splitter: new web3.eth.Contract(splitterArtifact.abi, "0x8D64B643C935B428b866fD8714f47F7405DC1dC8"),
+          vesting: new web3.eth.Contract(vestingArtifact.abi, "0x093B53EdCD2Dc76166Ca66ED33FE472C45C5A80F")
+        },
+        {
+          name: "DuckDAO Group 2 (Presale)",
+          splitter: new web3.eth.Contract(splitterArtifact.abi, "0xdcA870818AE9BABac5EFc5886Fbbb3770e24da00"),
+          vesting: new web3.eth.Contract(vestingArtifact.abi, "0x29573e8Ef5a4446F4167c7a41e418e5CC4d65a21")
+        },
+        {
+          name: "DuckDAO Group 3 (Presale)",
+          splitter: new web3.eth.Contract(splitterArtifact.abi, "0xD1a6D01a4939192246054Ee74Bfa53734cc9f0e7"),
+          vesting: new web3.eth.Contract(vestingArtifact.abi, "0x8154D878DA0Bf4a6694Eedc722809cEF92fe8c04")
         },
       ]
       this.selectedDistributor = this.distributors[0];
@@ -57,25 +72,28 @@ const App = {
         `)
 
         const { balanceOf } = that.aapx.methods;
-        const vested = Web3Utils.fromWei(await balanceOf(value.splitter.options.address).call())
+        const vested = App.fromWeiAndRoundDown(await balanceOf(value.splitter.options.address).call())
 
+        const coldVest = App.fromWeiAndRoundDown(await balanceOf(value.vesting.options.address).call())
         
-        const myVested = Web3Utils.fromWei(await that.calculateClaimableAAPX(value))
+        const myVested = App.fromWeiAndRoundDown(await that.calculateClaimableAAPX(value))
 
         $("#vestingContractsList").append(`
           <li class="list-group-item">
-            Name: ${value.name} <br> Total claimable: <b> ${vested} </b> <b> AAPX </b> <br> My claimable: <b> ${myVested} AAPX</b>
+            <b>${value.name}</b> | Total claimable: <b> ${vested} </b> <b> AAPX </b> | My claimable: <b> ${myVested} AAPX</b> | 
+            Total vested: <b>${coldVest}</b> <b>AAPX<b> 
           </li>
         `)
       })
 
+      var that;
       $(document).on('change', '#selectVesting', async function() {
         const selectedValue = $("#selectVesting").find("option:selected").attr("value")
         that.selectedDistributor = that.distributors[selectedValue]
         
 
         $("#tokensAvailableToClaim").html(
-          Web3Utils.fromWei(await that.calculateClaimableAAPX(this.selectedDistributor)) + " AAPX"
+          App.fromWeiAndRoundDown(await that.calculateClaimableAAPX(that.selectedDistributor)) + " AAPX"
         );
       })
 
@@ -88,7 +106,7 @@ const App = {
       const availableToClaim = await that.calculateClaimableAAPX(this.selectedDistributor)
 
       $("#tokensAvailableToClaim").html(
-        Web3Utils.fromWei(availableToClaim) + " AAPX"
+        App.fromWeiAndRoundDown(availableToClaim) + " AAPX"
       );
 
       await this.showBalances()
@@ -117,7 +135,7 @@ const App = {
     const { balanceOf } = this.aapx.methods;
     const accountBalance = await balanceOf(this.account).call();
     $("#myBalance").html(
-      Web3Utils.fromWei(accountBalance) + " AAPX"
+      App.fromWeiAndRoundDown(accountBalance) + " AAPX"
     )
   },
 
@@ -198,6 +216,10 @@ const App = {
 
   toggleAdvanced() {
     $("#advanced").toggle()
+  },
+
+  fromWeiAndRoundDown(amount) {
+    return Math.round(Web3Utils.fromWei(amount) * 10000) / 10000
   },
 
   connectWalletClicked: async function() {
