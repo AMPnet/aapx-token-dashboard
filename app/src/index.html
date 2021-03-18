@@ -105,17 +105,12 @@
             </div>
             <div class="">
               <ul class="list-group">
-                <li class="list-group-item">Contract address - <a href="https://etherscan.io/address/0xbfD815347d024F449886c171f78Fa5B8E6790811">0xbfD815347d024F449886c171f78Fa5B8E6790811</a></li>
+                <li class="list-group-item">Contract - <a href="https://etherscan.io/address/0xbfD815347d024F449886c171f78Fa5B8E6790811">Etherscan</a></li>
                 <li class="list-group-item">Trade on Uniswap - <a href="https://info.uniswap.org/token/0xbfd815347d024f449886c171f78fa5b8e6790811">Link</a></li>
+                <li class="list-group-item">Official Medium - <a href="https://ampnet.medium.com">Link</a></li>
+                <li class="list-group-item">Official Telegram - <a href="https://t.me/ampnetapxchat">Link</a></li>
+                <li class="list-group-item">Whitepaper - <a href="https://drive.google.com/file/d/1xNucfkpolkEVePigUp0Rq_pMD-gyfdm1/view">Link</a></li>
               </ul>
-            </div>
-            <div style="display: none;" class="card-title connected mt-3">
-              My balance
-            </div>
-            <div class="">
-              <div id="myBalance" style="display: none; font-weight: bold;" class="connected">
-              
-              </div>
             </div>
           </div>
         </div>
@@ -137,7 +132,7 @@
 
               <ul class="list-group">
                 <!-- <li class="list-group-item">Your AAPX Balance: <b id="balance"></b> <b>AAPX</b> </li> -->
-                <li class="list-group-item">Tokens available to claim: <b id="tokensAvailableToClaim"></b></li>
+                <li class="list-group-item">Claimable AAPX from Selected Pool: <b id="tokensAvailableToClaim"></b></li>
               </ul>
               <button onclick="App.releasePaymentSplitter()" class="btn btn-primary w-100 mt-3 py-3">Claim</button>
             </div>
@@ -147,22 +142,25 @@
 
       <div style="display: none;" class="col-md-12 connected mt-3">
         <div class="card">
+          
           <div class="card-body">
             <div class="card-title text-uppercase">
               Vesting contracts overview
             </div>
             <div class="card-text">
-              <ul id="vestingContractsList" class="list-group">
-                <!-- <li class="list-group-item">
-                  Presale: <b id="presaleClaimable"></b> <b>AAPX</b>
-                </li>
-                <li class="list-group-item">
-                  Seed Sale: <b>0</b> <b>AAPX</b>
-                </li>
-                <li class="list-group-item">
-                  Project (Team/Advisors/Pre-Seed): <b>0</b> <b>AAPX</b>
-                </li> -->
-              </ul>
+              <table class="table w-100 table-borderless table-striped">
+                <thead>
+                  <tr>
+                    <th scope="col"> Pool name </th>
+                    <th scope="col">Total claimable </th>
+                    <th scope="col">My claimable</th>
+                    <th scope="col">Remaining vested</th>
+                  </tr>
+                </thead>
+                <tbody id="vestingContractsList">
+
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
@@ -181,7 +179,7 @@
             <p class="card-text">Clicking on one of the Vest buttons below will Vest all of the tokens for one of the investment rounds. 
               The AMPnet team is commiting to call these functions periodically, however - if you need to vest & claim your tokens immediately - call the corresponding function yourself.</p>
             <div>
-              <button onclick="App.releaseVesting()" class="btn btn-primary w-100 text-uppercase">Release from Vesting contract to PaymentSplitter Contract</button>
+              <button onclick="App.releaseVesting()" class="btn btn-primary w-100 text-uppercase">Release from Vesting contract to PaymentSplitter Contract (Advanced)</button>
             </div>
           </div>
         </div>

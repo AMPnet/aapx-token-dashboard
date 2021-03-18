@@ -5,6 +5,7 @@ import Web3Modal from "web3modal";
 import aapxArtifact from "../../build/contracts/AAPX.json";
 import splitterArtifact from "../../build/contracts/PaymentSplitter.json"
 import vestingArtifact from "../../build/contracts/TokenVesting.json"
+import numeral from 'numeral'
 
 const AAPX_TOKEN_ADDRESS = "0xbfD815347d024F449886c171f78Fa5B8E6790811"
 
@@ -55,6 +56,11 @@ const App = {
           splitter: new web3.eth.Contract(splitterArtifact.abi, "0xD1a6D01a4939192246054Ee74Bfa53734cc9f0e7"),
           vesting: new web3.eth.Contract(vestingArtifact.abi, "0x8154D878DA0Bf4a6694Eedc722809cEF92fe8c04")
         },
+        {
+          name: "Private Group 1 (Presale)",
+          splitter: new web3.eth.Contract(splitterArtifact.abi, "0x44BA40CF2e9B84A9460068b8059b90903d17E1c3"),
+          vesting: new web3.eth.Contract(vestingArtifact.abi, "0xf6494a61E66618B70C87A664FB69F002DF29cF53")
+        },
       ]
       this.selectedDistributor = this.distributors[0];
 
@@ -64,6 +70,7 @@ const App = {
       );
 
       var that = this;
+
 
       $.each(this.distributors, async function(index, value) {
 
@@ -79,10 +86,12 @@ const App = {
         const myVested = App.fromWeiAndRoundDown(await that.calculateClaimableAAPX(value))
 
         $("#vestingContractsList").append(`
-          <li class="list-group-item">
-            <b>${value.name}</b> | Total claimable: <b> ${vested} </b> <b> AAPX </b> | My claimable: <b> ${myVested} AAPX</b> | 
-            Remaining vested: <b>${coldVest}</b> <b>AAPX<b> 
-          </li>
+          <tr>
+            <td>${value.name} AAPX</td> 
+            <td>${vested} AAPX</td>
+            <td>${myVested} AAPX</td>
+            <td>${coldVest} AAPX</td>
+          </tr>
         `)
       })
 
@@ -219,7 +228,7 @@ const App = {
   },
 
   fromWeiAndRoundDown(amount) {
-    return Math.round(Web3Utils.fromWei(amount) * 10000) / 10000
+    return numeral(Math.round(Web3Utils.fromWei(amount) * 10000) / 10000).format("0,0.0000")
   },
 
   connectWalletClicked: async function() {
