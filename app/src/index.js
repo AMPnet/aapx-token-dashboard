@@ -61,6 +61,11 @@ const App = {
           splitter: new web3.eth.Contract(splitterArtifact.abi, "0x44BA40CF2e9B84A9460068b8059b90903d17E1c3"),
           vesting: new web3.eth.Contract(vestingArtifact.abi, "0xf6494a61E66618B70C87A664FB69F002DF29cF53")
         },
+        {
+          name: "Private Group 2 (Presale)",
+          splitter: new web3.eth.Contract(splitterArtifact.abi, "0x28663425a3e4425b6b54ef72d1dffd82663c3f06"),
+          vesting: new web3.eth.Contract(vestingArtifact.abi, "0x0d87f41be645fb600de129f91e9ccad9e3b2688d")
+        }
       ]
       this.selectedDistributor = this.distributors[0];
 
