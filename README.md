@@ -19,5 +19,7 @@ truffle compile
 In the `app` folder (for development) - run:
 
 ```
+npm install
+npm run build
 npm run dev 
 ```
