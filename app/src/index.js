@@ -65,6 +65,21 @@ const App = {
           name: "Private Group 2 (Presale)",
           splitter: new web3.eth.Contract(splitterArtifact.abi, "0x28663425a3e4425b6b54ef72d1dffd82663c3f06"),
           vesting: new web3.eth.Contract(vestingArtifact.abi, "0x0d87f41be645fb600de129f91e9ccad9e3b2688d")
+        },
+        {
+          name: "The Crypto Lifestyle 1 (Seed)",
+          splitter: new web3.eth.Contract(splitterArtifact.abi, "0x0e791a78b0f530b9ad62bcab658b4f508dc891a9"),
+          vesting: new web3.eth.Contract(vestingArtifact.abi, "0x96748459e1af603421caefd7665ed5d08a15027a")
+        },
+        {
+          name: "BlackDragon (Seed)",
+          splitter: new web3.eth.Contract(splitterArtifact.abi, "0x377b768810d856b50c737bc72aa34541e14bcb60"),
+          vesting: new web3.eth.Contract(vestingArtifact.abi, "0xb560d231e606f547793699cea81a019513308be3")
+        },
+        {
+          name: "The Crypto Lifestyle 2 (Seed)",
+          splitter: new web3.eth.Contract(splitterArtifact.abi, "0xf966fd3f22fe4988f63074b6d37ccfe2ad5e0338"),
+          vesting: new web3.eth.Contract(vestingArtifact.abi, "0x7a084e2318be17f9fc98171ca93107f3d9546030")
         }
       ]
       this.selectedDistributor = this.distributors[0];
