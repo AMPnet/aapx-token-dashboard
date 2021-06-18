@@ -80,6 +80,11 @@ const App = {
           name: "The Crypto Lifestyle 2 (Seed)",
           splitter: new web3.eth.Contract(splitterArtifact.abi, "0xf966fd3f22fe4988f63074b6d37ccfe2ad5e0338"),
           vesting: new web3.eth.Contract(vestingArtifact.abi, "0x7a084e2318be17f9fc98171ca93107f3d9546030")
+        },
+        {
+          name: "Private Investors (Seed)",
+          splitter: new web3.eth.Contract(splitterArtifact.abi, "0xcccc7d131a482af28c0fe7f43edcdf131349bde9"),
+          vesting: new web3.eth.Contract(vestingArtifact.abi, "0x6fc1d12c203e34c024e13768314bf5539cdc5c73")
         }
       ]
       this.selectedDistributor = this.distributors[0];
