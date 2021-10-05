@@ -10,8 +10,7 @@ import numeral from 'numeral'
 fetch('https://api.ampnet.io/supply')
     .then(response => response.json())
     .then(data => {
-        console.log(data)
-        $('#circulating_supply').html(`Circulating supply: ${parseInt(data.circulating_supply)} / ${data.total_supply}`);
+        $('#circulating_supply').html(`${parseInt(data.circulating_supply)} / ${data.total_supply}`);
     });
 
 
